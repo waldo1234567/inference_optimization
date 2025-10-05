@@ -16,5 +16,33 @@
 
 ### Performance Result
 
+Batch-size 12, Seq_len = 64 [12x64] warmup 200 with 1000 iterations
+
+!
+
 ## Pytorch
 ![alt text](https://github.com/waldo1234567/inference_optimization/blob/main/screenshots/pytorch.png)
+
+## Onnx
+![alt text](https://github.com/waldo1234567/inference_optimization/blob/main/screenshots/onnx.png)
+
+## TensorRt FP32
+![alt text](https://github.com/waldo1234567/inference_optimization/blob/main/screenshots/trt_fp32.png)
+
+## TensorRt INT8
+![alt text](https://github.com/waldo1234567/inference_optimization/blob/main/screenshots/trt_int8.png)
+
+## Accuracy Report (FP32 V INT8)
+![alt text](https://github.com/waldo1234567/inference_optimization/blob/main/screenshots/accuracy.png)
+
+I didnt use FP16, because of my gpu (gtx 1650 does not support TensorCores). I have built and tested FP16, but the performance are the same with FP32
+
+### INT 8 Quantization
+
+* Initially the accuracy loss was up to 18-20% from FP32 (I did not calibrate the engine)
+* After that I tried again with 1000 samples calibration, and the accuracy loss went down to ~10%
+* Finally i tried with bigger samples; 12000. This resulting the accuracy loss went down even further, up to ~5%
+
+
+
+
