@@ -1,8 +1,10 @@
 import time
 import onnxruntime as ort
 import numpy as np
+import torch
 from transformers import AutoTokenizer
 
+device = "cuda" if torch.cuda.is_available() else "cpu"
 tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
 session = ort.InferenceSession("distilbert_model.onnx", providers=['CUDAExecutionProvider'])
 
@@ -12,8 +14,9 @@ test_texts = [
     "An even longer sentence that contains significantly more tokens to really test the performance characteristics.",
 ] * 4
 
-def benchmark_onnx(session, texts, num_runs=100, iterations=10):
-    inputs = tokenizer(texts, return_tensors="np", padding=True, truncation=True)
+
+def benchmark_onnx(session, texts, num_runs=1000, iterations=200, seq_len=64):
+    inputs = tokenizer(texts, return_tensors="np", padding="max_length", truncation=True, max_length=seq_len).to(device)
     print(f"Actual sequence length: {inputs['input_ids'].shape[1]}")
     onnx_inputs = {
         'input_ids': inputs['input_ids'].astype(np.int64),
@@ -31,12 +34,12 @@ def benchmark_onnx(session, texts, num_runs=100, iterations=10):
 
     latencies = np.array(latencies)
     
-    print(f"ONNX Runtime - Batch size: {len(texts)}")
+    print(f"ONNX Runtime - Batch size: {len(texts)} , Sequence Length: {seq_len}")
     print(f"  Mean latency: {latencies.mean():.2f} ms")
     print(f"  P50: {np.percentile(latencies, 50):.2f} ms")
     print(f"  P95: {np.percentile(latencies, 95):.2f} ms")
     print(f"  Throughput: {1000 * len(texts) / latencies.mean():.2f} samples/sec")
-    print(f"  Speedup vs PyTorch: {17.68 / latencies.mean():.2f}x")
+    print(f"  Speedup vs PyTorch: {56.64 / latencies.mean():.2f}x")
     
 
 benchmark_onnx(session, test_texts)  

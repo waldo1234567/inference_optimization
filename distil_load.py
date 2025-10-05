@@ -18,8 +18,8 @@ test_texts = [
 ]
 
 
-def benchmark_model(model, texts, num_runs=100, iterations=10):
-    inputs = tokenizer(texts, return_tensors="pt", padding=True, truncation=True).to(device)  
+def benchmark_model(model, texts,seq_len=64 ,num_runs=1000, iterations=200):
+    inputs = tokenizer(texts, return_tensors="pt", padding="max_length", truncation=True, max_length = seq_len).to(device)  
     
     with torch.no_grad():
         for _ in range(iterations):
@@ -35,8 +35,8 @@ def benchmark_model(model, texts, num_runs=100, iterations=10):
             times.append(time.time() - start)
     
     times = np.array(times) * 1000  # convert to milliseconds
-    
-    print(f"PyTorch Baseline - Batch size: {len(texts)}")
+    bs = len(texts)
+    print(f"PyTorch Baseline - Batch size: {bs}, Seq length: {seq_len}")
     print(f"  Mean latency: {times.mean():.2f} ms")
     print(f"  Std latency: {times.std():.2f} ms")
     print(f"  P50: {np.percentile(times, 50):.2f} ms")
@@ -48,5 +48,5 @@ def benchmark_model(model, texts, num_runs=100, iterations=10):
     return times.mean()
 
 
-baseline_latency = benchmark_model(model, test_texts * 4) # Batch size of 12
+baseline_latency = benchmark_model(model, test_texts * 4,seq_len=64 ,num_runs=1000, iterations=200) # Batch size of 12
 
