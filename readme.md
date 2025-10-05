@@ -16,4 +16,5 @@
 
 ### Performance Result
 
-
+## Pytorch
+![alt text](https://github.com/waldo1234567/inference_optimization/blob/main/screenshots/pytorch.png)
