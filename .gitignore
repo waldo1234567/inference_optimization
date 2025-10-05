@@ -1,0 +1,8 @@
+distilbert-base-uncased-finetuned-emotion/
+sandbox/
+
+__pycache__/
+
+*.onnx
+*.trt
+*.nsys-rep

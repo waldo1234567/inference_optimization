@@ -1,0 +1,26 @@
+{
+  "task": "sequence-classification",
+  "num_samples": 872,
+  "engines": {
+    "distilbert_fp32.trt": {
+      "accuracy": 1.0,
+      "top1_ref_contains_test": 1.0,
+      "top1_test_contains_ref": 1.0,
+      "top3_ref_contains_test": 1.0,
+      "top3_test_contains_ref": 1.0,
+      "max_abs_diff": 2.3484230041503906e-05,
+      "mean_abs_diff": 9.445335535929189e-07,
+      "rmse": 1.834464796957036e-06
+    },
+    "distilbert_int8_minmax.trt": {
+      "accuracy": 0.9254587155963303,
+      "top1_ref_contains_test": 0.9254587155963303,
+      "top1_test_contains_ref": 0.9254587155963303,
+      "top3_ref_contains_test": 1.0,
+      "top3_test_contains_ref": 1.0,
+      "max_abs_diff": 4.253604412078857,
+      "mean_abs_diff": 1.7366434335708618,
+      "rmse": 1.8432118892669678
+    }
+  }
+}
